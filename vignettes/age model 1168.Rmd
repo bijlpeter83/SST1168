@@ -1,0 +1,51 @@
+
+
+```{r}
+#runs all requires packages
+library(caTools)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(readxl)
+library(tidyverse)
+library(plotly)
+#library(ggtern)
+library(neotoma)
+library(rbacon)
+library(clam)
+#library(Cairo)
+#opens age model table
+AM1168 <- read_excel("agemodel1168.xlsx")
+#testLoess <- loess(AM1168$AgeGTS12, span=0.1)
+```
+
+```{r}
+#this plots the data with a LOESS curve
+
+ggplot() +
+  geom_point(AM1168, mapping = aes(x = `AgeGTS12`, y = `depth mean`, color = `Datum type`)) +
+  geom_errorbar(AM1168, mapping = aes(x = `AgeGTS12`, ymin = `depth top`, ymax = `depth bottom` + `depth range`)) +
+  geom_errorbarh(AM1168, mapping = aes(y = `depth mean`, xmin = `AgeGTS12` - `age error`, xmax = `AgeGTS12` + `age error`)) +
+  scale_y_reverse('Depth (mbsf)') +
+  geom_smooth(AM1168, mapping = aes(x = `AgeGTS12`, y = `depth mean`, weight=`weight`),method="loess",span =0.1)+
+  scale_x_continuous('Age-GTS2020 (Ma)')+
+ 
+theme_bw()
+theme(panel.border=element_blank())
+theme(panel.grid=element_blank())
+#ggsave("agemodel1168weight.png", width=16,height =9 ,units = c("cm"))
+```
+
+```{r}
+#now we need to use the loess curve to calculate ages for the depths of the OG samples
+#testLoess <- loess(AM1168$AgeGTS12~AM1168$`depth mean`, method="loess",span=0.1)
+testLoess <- loess(AM1168$AgeGTS12~AM1168$`depth mean`, weights=AM1168$`weight`, method="loess",span=0.1)
+predict(testLoess, 6.23)
+smooth<-predict(testLoess, AM1168$'depth(mbsf)')
+write.table(smooth, file = "newage.csv")
+
+#INTERPOLATE
+```
+
+
+
