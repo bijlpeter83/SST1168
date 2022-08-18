@@ -6,5 +6,8 @@ Hoem, F.S., ....  Oligocene-lower Miocene TEX86
 Hou, S., .... Neogene-Quaternary TEX86 and UK'37
 Guitian... Oligocene UK37
 
-Age model published in Hou et al.
+Age model published in Hou et al. In brief we interpolated a LOESS smooth fit through biostratigraphic and magnetostratigraphic data (Stickley et al., 2004) which were updated to GTS2020 using Nannotax and FORAMTAX. Extra weight was put on magnetostratigraphic tie points.
 
+For all data we used the Bayesian calibrations of Tierney and Tingley, 2015 and Tierney and Tingley 2018
+BAYSPAR with prior mean of 20 and prior stdev of 20
+BAYSPLINE with prior stdev of 10
